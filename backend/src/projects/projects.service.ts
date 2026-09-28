@@ -13,6 +13,7 @@ export class ProjectsService {
         name: dto.name,
         description: dto.description,
       },
+      include: { files: { select: { id: true } } },
     });
   }
 

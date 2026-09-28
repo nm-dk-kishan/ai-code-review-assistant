@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { apiCall } from '@/lib/api';
+import { API_URL, apiCall } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth-store';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -65,8 +65,10 @@ export default function ProjectDetailPage() {
   }
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.currentTarget.files?.[0];
+    const input = e.currentTarget;
+    const file = input.files?.[0];
     if (!file) return;
+    input.value = '';
 
     if (!file.name.endsWith('.zip')) {
       toast.error('Please upload a ZIP file');
@@ -79,7 +81,7 @@ export default function ProjectDetailPage() {
       formData.append('file', file);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/files/upload/${projectId}`,
+        `${API_URL}/files/upload/${projectId}`,
         {
           method: 'POST',
           headers: {
@@ -97,7 +99,6 @@ export default function ProjectDetailPage() {
       toast.error('Upload failed');
     } finally {
       setUploading(false);
-      e.currentTarget.value = '';
     }
   }
 

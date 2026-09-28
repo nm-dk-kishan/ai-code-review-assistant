@@ -7,23 +7,16 @@ This is a production-ready full-stack application. Both backend and frontend hav
 ## Prerequisites
 
 - Node.js 18+ and npm
-- PostgreSQL 12+ running locally or accessible
+- MongoDB 6+ running locally or accessible (Atlas recommended)
 - An AI provider account (OpenAI, or local LM Studio)
 
 ## Step 1: Database Setup
 
-### Create PostgreSQL Database
+### Install MongoDB
+- Download from [MongoDB Website](https://www.mongodb.com/try/download/community) or use Docker:
 ```bash
-createdb code_review_db
+docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
-
-### Run Prisma Migrations
-```bash
-cd backend
-npx prisma migrate dev --name init
-```
-
-This will create all tables and relations in PostgreSQL.
 
 ## Step 2: Configure Environment Variables
 
@@ -35,7 +28,7 @@ cp .env.example .env
 
 Edit `backend/.env`:
 ```
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/code_review_db"
+DATABASE_URL="mongodb://localhost:27017/code_review_db"
 JWT_SECRET="your-super-secret-key-change-this"
 JWT_EXPIRATION="7d"
 MAX_FILE_SIZE=52428800
@@ -44,8 +37,6 @@ API_PORT=3000
 API_URL="http://localhost:3000"
 FRONTEND_URL="http://localhost:3001"
 ```
-
-Replace `USER` and `PASSWORD` with your PostgreSQL credentials.
 
 ### Frontend Configuration
 ```bash
@@ -151,15 +142,11 @@ npm run build         # Full type check during build
 
 ## Troubleshooting
 
-### PostgreSQL Connection Error
+### MongoDB Connection Error
 ```bash
-# Check if PostgreSQL is running
-psql -U postgres -d code_review_db
-
-# If connection refused, ensure PostgreSQL service is running
-# Windows: Services > PostgreSQL
-# Mac: brew services start postgresql
-# Linux: systemctl start postgresql
+# Ensure MongoDB is running
+docker ps
+# If using a local installer, check your services panel
 ```
 
 ### AI Provider Connection Failed

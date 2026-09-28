@@ -6,7 +6,7 @@ The AI-Powered Code Review Assistant is a full-stack web application with a clea
 
 - **Frontend**: Next.js with client-side state management
 - **Backend**: NestJS microservices-ready architecture
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: MongoDB with Prisma ORM
 - **AI Integration**: OpenAI-compatible API abstraction layer
 
 ## Frontend Architecture
@@ -244,7 +244,7 @@ src/
 ### Schema
 
 **User**
-- id: String (unique identifier)
+- id: String (ObjectId)
 - email: String (unique)
 - password: String (hashed)
 - name: String (optional)
@@ -253,40 +253,40 @@ src/
 **Project**
 - id, userId, name, description
 - createdAt, updatedAt
-- Relation: belongsTo User, hasMany Files, hasMany Reviews
+- Relation: belongsTo User (via userId, ObjectId), hasMany Files, hasMany Reviews
 
 **File**
 - id, projectId, path, content, language, size
 - createdAt, updatedAt
-- Relation: belongsTo Project, hasMany Reviews
+- Relation: belongsTo Project (via projectId, ObjectId)
 
 **Review**
-- id, userId, projectId, fileIds (JSON array), mode
+- id, userId, projectId, fileIds (Array of ObjectIds), mode
 - summary, issues (JSON), recommendations
 - createdAt, updatedAt
-- Relation: belongsTo User, belongsTo Project
+- Relation: belongsTo User (via userId, ObjectId), belongsTo Project (via projectId, ObjectId)
 
 **AIProvider**
 - id, userId, name, baseUrl, apiKey, modelName, isDefault
 - createdAt, updatedAt
-- Relation: belongsTo User
+- Relation: belongsTo User (via userId, ObjectId)
 
 **ChatSession**
-- id, userId, projectId (optional), title
+- id, userId, projectId (optional, ObjectId), title
 - createdAt, updatedAt
-- Relation: belongsTo User, hasMany Messages
+- Relation: belongsTo User (via userId, ObjectId), hasMany Messages
 
 **Message**
 - id, sessionId, role ('user'|'assistant'), content
 - createdAt
-- Relation: belongsTo ChatSession
+- Relation: belongsTo ChatSession (via sessionId, ObjectId)
 
 ### Relationships
 
 - One-to-Many: User → Projects, Files, Reviews, ChatSessions, AIProviders
 - One-to-Many: Project → Files, Reviews
 - One-to-Many: ChatSession → Messages
-- All with CASCADE delete for data integrity
+- Prisma handles MongoDB ObjectId relations seamlessly
 
 ## Authentication Flow
 
