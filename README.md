@@ -43,7 +43,7 @@ A professional code review tool powered by AI that provides security, performanc
 
 ### Backend
 - **Framework**: NestJS with TypeScript
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: MongoDB with Prisma ORM
 - **Authentication**: JWT + Passport + bcrypt
 - **File Handling**: Multer, Unzipper with safe extraction
 - **AI Integration**: Axios for OpenAI-compatible APIs
@@ -54,7 +54,7 @@ A professional code review tool powered by AI that provides security, performanc
 
 ### Backend (.env)
 ```
-DATABASE_URL="postgresql://user:password@localhost:5432/code_review_db"
+DATABASE_URL="mongodb://localhost:27017/code_review_db"
 JWT_SECRET="your-secret-key-change-in-production"
 JWT_EXPIRATION="7d"
 MAX_FILE_SIZE=52428800
@@ -75,20 +75,18 @@ NEXT_PUBLIC_API_URL="http://localhost:3000/api"
 
 ### Prerequisites
 - Node.js 18+ and npm
-- PostgreSQL 12+
+- MongoDB 6+ running locally
 - An AI provider account (OpenAI, LM Studio, or compatible API)
 
 ### Database Setup
 
-1. **Create PostgreSQL Database**
-```bash
-createdb code_review_db
-```
+1. **Start MongoDB**
+Ensure MongoDB is running locally (`mongodb://localhost:27017`).
 
-2. **Run Migrations**
+2. **Generate Prisma Client**
 ```bash
 cd backend
-npx prisma migrate dev --name init
+npx prisma generate
 ```
 
 ### Backend Installation
@@ -177,37 +175,37 @@ Open `http://localhost:3001` in your browser
 ## API Endpoints
 
 ### Authentication
-- `POST /auth/register` - Register new user
-- `POST /auth/login` - Login user
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
 
 ### Users
-- `GET /users/profile` - Get user profile
+- `GET /api/users/profile` - Get user profile
 
 ### Projects
-- `POST /projects` - Create project
-- `GET /projects` - List user projects
-- `GET /projects/:id` - Get project details
-- `PUT /projects/:id` - Update project
-- `DELETE /projects/:id` - Delete project
+- `POST /api/projects` - Create project
+- `GET /api/projects` - List user projects
+- `GET /api/projects/:id` - Get project details
+- `PUT /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project
 
 ### Files
-- `POST /files/upload/:projectId` - Upload ZIP file
-- `GET /files/project/:projectId` - List project files
-- `GET /files/:id` - Get file content
-- `DELETE /files/:id` - Delete file
+- `POST /api/files/upload/:projectId` - Upload ZIP file
+- `GET /api/files/project/:projectId` - List project files
+- `GET /api/files/:id` - Get file content
+- `DELETE /api/files/:id` - Delete file
 
 ### Reviews
-- `POST /reviews` - Create review
-- `GET /reviews` - List reviews
-- `GET /reviews/:id` - Get review details
-- `DELETE /reviews/:id` - Delete review
+- `POST /api/reviews` - Create review
+- `GET /api/reviews` - List reviews
+- `GET /api/reviews/:id` - Get review details
+- `DELETE /api/reviews/:id` - Delete review
 
 ### AI Providers
-- `POST /providers` - Add AI provider
-- `GET /providers` - List providers
-- `GET /providers/default` - Get default provider
-- `GET /providers/:id` - Get provider details
-- `PUT /providers/:id` - Update provider
+- `POST /api/providers` - Add AI provider
+- `GET /api/providers` - List providers
+- `GET /api/providers/default` - Get default provider
+- `GET /api/providers/:id` - Get provider details
+- `PUT /api/providers/:id` - Update provider
 - `POST /providers/:id/set-default` - Set as default
 - `DELETE /providers/:id` - Delete provider
 
@@ -331,10 +329,9 @@ npm run lint      # Run linter
 
 ## Troubleshooting
 
-### Database Connection Error
+### MongoDB Connection Error
 ```
-Ensure PostgreSQL is running and DATABASE_URL is correct
-psql -U postgres -d code_review_db
+Ensure MongoDB is running locally
 ```
 
 ### AI Provider Connection Failed
@@ -364,3 +361,4 @@ This is a full-stack application built with production-quality code. All modules
 ## License
 
 MIT
+# ai-code-review-assistant
